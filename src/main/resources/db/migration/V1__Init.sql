@@ -46,7 +46,7 @@ CREATE TABLE refresh_tokens (
     token VARCHAR(255),
     user_id INTEGER,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
-    expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    expires_at TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
 -- Password Resets table
