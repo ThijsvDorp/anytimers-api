@@ -59,8 +59,8 @@ public class AuthService extends EntityService<RefreshToken, RefreshTokenReposit
                     Instant.now()).map(
                             t -> t.getToken())
                     .orElseThrow(() -> new UserNotFoundException("Token not found"));
-
-            return refresh(presentToken);
+                    
+            //return refresh(presentToken); TODO: Make it return AuthReadDto with current refreshToken and new accessToken
         }
         RefreshToken token = new RefreshToken(refreshToken, user.getId(), expiresAt);
         repository.save(token);
@@ -68,8 +68,8 @@ public class AuthService extends EntityService<RefreshToken, RefreshTokenReposit
         return new AuthReadDto(accessToken, refreshToken);
     }
 
-    public AuthReadDto refresh(String refreshToken) {
-        // TODO: Implement refresh of accessToken
+    public String refresh(String refreshToken) {
+        return refreshToken;// TODO: Implement refresh of accessToken
     }
 
     /**

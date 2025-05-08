@@ -10,6 +10,7 @@ import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.anytimers.api.domain.auth.userdetails.CustomUserDetails;
@@ -33,7 +34,19 @@ public class JwtUtil {
     public void init() {
         this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
     }
-
+/**
+ * Helper method to retrieve the user id from the jwt payload
+ * @param token the token to retrieve the id from
+ * @return integer representing the users id
+ */
+    public Integer retrieveUserIdFromToken(String token) {
+        return Jwts.parser()
+            .verifyWith(key)
+            .build()
+            .parseSignedClaims(token)
+            .getPayload()
+            .get("userId", Integer.class);
+    }
     /**
      * Generates a accessToken
      * 
