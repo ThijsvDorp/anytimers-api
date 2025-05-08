@@ -1,0 +1,13 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "Anytimers Database",
+            "Group": "Servers",
+            "Port": 5432,
+            "Username": "anytimers",
+            "Host": "anytimers-db",
+            "SSLMode": "prefer",
+            "MaintenanceDB": "postgres"            
+        }
+    }
+}

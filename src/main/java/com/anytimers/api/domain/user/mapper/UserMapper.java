@@ -1,0 +1,25 @@
+package com.anytimers.api.domain.user.mapper;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
+
+import com.anytimers.api.domain.user.controller.dto.UserReadDto;
+import com.anytimers.api.domain.user.controller.dto.UserWriteDto;
+import com.anytimers.api.domain.user.data.User;
+
+@Mapper(componentModel = "spring")
+public interface UserMapper {
+
+    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+
+    @Mapping(target = "createdOn", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "updatedOn", ignore = true)
+    @Mapping(target = "role", ignore = true)//TODO: Maybe fix if i want to implement role management
+    User toEntity(UserWriteDto dto);
+
+    UserWriteDto toWriteDto(User user);
+
+    UserReadDto toReadDto(User user);
+}

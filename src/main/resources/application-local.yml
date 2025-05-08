@@ -1,0 +1,20 @@
+spring:
+  flyway:
+    locations:
+      - classpath:db/migration
+      - classpath:db/dev-data
+    baseline-on-migrate: true
+  datasource:
+    url: jdbc:postgresql://anytimers-db:5432/anytimers
+    username: anytimers
+    password: devpass
+    driver-class-name: org.postgresql.Driver
+    tomcat:
+      test-while-idle: true
+      validation-query: SELECT 1
+      time-between-eviction-runs-millis: 60000
+  application:
+    name: anytimers-api
+jwt:
+  secret: "b2d8f7e9c3a1b4e6d5f8c2a9e7b6d4f3"
+  expiration: 360000
