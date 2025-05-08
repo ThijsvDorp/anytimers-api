@@ -36,16 +36,17 @@ CREATE TABLE anytimers (
     description VARCHAR(255),
     redemption_message VARCHAR(255),
     status VARCHAR(255),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    redeemed_at TIMESTAMP
+    redeemed_at TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Refresh Token table
 CREATE TABLE refresh_tokens (
     id SERIAL PRIMARY KEY,
+    token VARCHAR(255),
+    user_id INTEGER,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
-    user_id INTEGER
 );
 
 -- Password Resets table

@@ -1,20 +1,25 @@
 package com.anytimers.api.domain.auth.service;
 
+import java.time.Duration;
+import java.time.Instant;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder.BCryptVersion;
 import org.springframework.stereotype.Service;
 
 import com.anytimers.api.domain.auth.controller.dto.AuthReadDto;
 import com.anytimers.api.domain.auth.controller.dto.AuthWriteDto;
+import com.anytimers.api.domain.auth.data.RefreshToken;
+import com.anytimers.api.domain.auth.data.RefreshTokenRepository;
 import com.anytimers.api.domain.auth.exception.InvalidCredentialsException;
 import com.anytimers.api.domain.auth.jwt.JwtUtil;
 import com.anytimers.api.domain.auth.mapper.CustomUserDetailsMapper;
 import com.anytimers.api.domain.auth.userdetails.CustomUserDetails;
 import com.anytimers.api.domain.user.data.User;
 import com.anytimers.api.domain.user.service.UserService;
+import com.anytimers.api.util.service.EntityService;
 
 @Service
-public class AuthService {
+public class AuthService extends EntityService<RefreshToken, RefreshTokenRepository> {
 
     private final UserService userService;
 
@@ -24,7 +29,8 @@ public class AuthService {
 
     private BCryptPasswordEncoder passwordEncoder;
 
-    public AuthService( UserService userService, JwtUtil jwtUtil, CustomUserDetailsMapper mapper, BCryptPasswordEncoder encoder) {
+    public AuthService(RefreshTokenRepository repository, UserService userService, JwtUtil jwtUtil, CustomUserDetailsMapper mapper, BCryptPasswordEncoder encoder) {
+        super("refreshToken", repository);
         this.userService = userService;
         this.jwtUtil = jwtUtil;
         this.mapper = mapper;
@@ -42,6 +48,11 @@ public class AuthService {
         CustomUserDetails userDetails = mapper.toCustomUserDetails(user);
         String accessToken = jwtUtil.generateToken(userDetails);
         String refreshToken = jwtUtil.generateRefreshToken(user.getId());
+
+        Instant expiresAt = Instant.now().plus(Duration.ofDays(1));
+        RefreshToken token = new RefreshToken(refreshToken, user.getId(), expiresAt);
+        repository.save(token);
+
         return new AuthReadDto(accessToken, refreshToken);
     }
 
