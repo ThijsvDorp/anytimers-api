@@ -53,14 +53,15 @@ public class AuthService extends EntityService<RefreshToken, RefreshTokenReposit
         String refreshToken = jwtUtil.generateRefreshToken(user.getId());
 
         Instant expiresAt = Instant.now().plus(Duration.ofDays(1));
+
         if (repository.findByUserIdAndExpiresAtAfter(user.getId(), Instant.now()).isPresent()) {
             String presentToken = repository.findByUserIdAndExpiresAtAfter(
                     user.getId(),
                     Instant.now()).map(
                             t -> t.getToken())
-                    .orElseThrow(() -> new UserNotFoundException("Token not found"));
+                    .orElseThrow(() -> new InvalidCredentialsException("Token not found"));
                     
-            //return refresh(presentToken); TODO: Make it return AuthReadDto with current refreshToken and new accessToken
+            return refresh(presentToken);
         }
         RefreshToken token = new RefreshToken(refreshToken, user.getId(), expiresAt);
         repository.save(token);
@@ -68,8 +69,17 @@ public class AuthService extends EntityService<RefreshToken, RefreshTokenReposit
         return new AuthReadDto(accessToken, refreshToken);
     }
 
-    public String refresh(String refreshToken) {
-        return refreshToken;// TODO: Implement refresh of accessToken
+    public AuthReadDto refresh(String refreshToken) {
+        Integer userId = jwtUtil.retrieveUserIdFromToken(refreshToken);
+
+        repository.findByUserIdAndExpiresAtAfter(userId, Instant.now())
+            .filter(t -> t.getToken().equals(refreshToken))
+            .orElseThrow(() -> new InvalidCredentialsException());
+
+        User user = userService.getUserById(userId);
+        CustomUserDetails userDetails = mapper.toCustomUserDetails(user);
+        String newAccessToken = jwtUtil.generateToken(userDetails);
+        return new AuthReadDto(newAccessToken, refreshToken);
     }
 
     /**

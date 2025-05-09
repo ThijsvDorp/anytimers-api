@@ -41,6 +41,10 @@ public class UserService extends EntityService<User, UserRepository> {
         return repository.findAll(pageable);
     };
 
+    public User getUserById(Integer userId) {
+        return repository.getReferenceById(userId);
+    }
+
     /**
      * 
      * @param identifier The email or username
