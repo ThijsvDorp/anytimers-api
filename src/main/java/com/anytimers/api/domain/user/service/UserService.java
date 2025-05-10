@@ -46,6 +46,29 @@ public class UserService extends EntityService<User, UserRepository> {
     }
 
     /**
+     * Updates a user by its fields
+     * @param id The id of the user that is being updated
+     * @param dto The updated values
+     * @return {@link UserReadDto} object containing the updated values
+     */
+    public User update(Integer id, UserWriteDto dto) {
+        User user = repository.findById(id)
+            .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        if (repository.existsByEmail(dto.getEmail())) {
+            throw new UserAlreadyExistsException("email", dto.getEmail());
+        }
+
+        if (repository.existsByUserName(dto.getUserName())) {
+            throw new UserAlreadyExistsException("username", dto.getUserName());
+        }
+
+        userMapper.updateUserFromDto(dto, user);
+
+        return repository.save(user);
+    }
+    
+    /**
      * 
      * @param identifier The email or username
      * @return {@link User} object

@@ -1,5 +1,7 @@
 package com.anytimers.api.domain.user.controller;
 
+import java.util.Map;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
@@ -14,6 +16,8 @@ import com.anytimers.api.domain.user.mapper.UserMapper;
 import com.anytimers.api.domain.user.service.UserService;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 
 @RestController
@@ -43,4 +47,8 @@ public class UserController {
             .map(userMapper::toReadDto);
     }
     
+    @PatchMapping("/{id}")
+    public UserReadDto updateUser(@PathVariable Integer id, @RequestBody UserWriteDto dto) {
+        return userMapper.toReadDto(userService.update(id, dto));
+    }
 }
