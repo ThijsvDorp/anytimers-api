@@ -35,7 +35,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public UserDetails loadUserById(Integer userId) throws UsernameNotFoundException {
-        System.out.println(userId + " User: " + userService.getUserById(userId));
         try {
             User user = userService.getUserById(userId);
             return mapper.toCustomUserDetails(user);

@@ -36,7 +36,7 @@ public class UserController {
     public UserReadDto createUser(@RequestBody UserWriteDto dto) {
         return userMapper.toReadDto(userService.createUser(dto));
     }
-
+    
     @GetMapping
     public Page<UserReadDto> getUsers(Pageable pageable) {
         return userService.getAllUsers(pageable)

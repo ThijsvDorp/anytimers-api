@@ -67,7 +67,6 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @Nonnull
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
@@ -90,5 +89,6 @@ public class User {
         if (this.createdOn == null) {
             this.createdOn = Instant.now();
         }
+        this.role = Role.USER;
     }
 }
