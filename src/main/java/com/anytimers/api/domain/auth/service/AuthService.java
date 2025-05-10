@@ -11,7 +11,6 @@ import com.anytimers.api.domain.auth.controller.dto.AuthWriteDto;
 import com.anytimers.api.domain.auth.data.RefreshToken;
 import com.anytimers.api.domain.auth.data.RefreshTokenRepository;
 import com.anytimers.api.domain.auth.exception.InvalidCredentialsException;
-import com.anytimers.api.domain.auth.exception.UserNotFoundException;
 import com.anytimers.api.domain.auth.jwt.JwtUtil;
 import com.anytimers.api.domain.auth.mapper.CustomUserDetailsMapper;
 import com.anytimers.api.domain.auth.userdetails.CustomUserDetails;
@@ -19,7 +18,10 @@ import com.anytimers.api.domain.user.data.User;
 import com.anytimers.api.domain.user.service.UserService;
 import com.anytimers.api.util.service.EntityService;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class AuthService extends EntityService<RefreshToken, RefreshTokenRepository> {
 
     private final UserService userService;
