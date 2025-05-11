@@ -1,7 +1,5 @@
 package com.anytimers.api.domain.user.controller;
 
-import java.util.Map;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;

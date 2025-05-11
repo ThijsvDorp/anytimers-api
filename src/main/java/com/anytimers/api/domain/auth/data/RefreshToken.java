@@ -2,8 +2,6 @@ package com.anytimers.api.domain.auth.data;
 
 import java.time.Instant;
 
-import org.springframework.beans.factory.annotation.Value;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

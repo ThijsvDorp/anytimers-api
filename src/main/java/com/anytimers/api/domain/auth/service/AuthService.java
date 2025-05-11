@@ -47,8 +47,7 @@ public class AuthService extends EntityService<RefreshToken, RefreshTokenReposit
      * @param dto containing the email or username and password
      * @return the accessToken and refreshToken for the given user
      */
-    public AuthReadDto authenticate(AuthWriteDto dto) { // TODO: Think about when a user already has a valid
-                                                        // refreshToken, how we redirect them to /refresh instead
+    public AuthReadDto authenticate(AuthWriteDto dto) {                                         
         User user = getUserAndValidateCredentials(dto.getIdentifier(), dto.getPassword());
         CustomUserDetails userDetails = mapper.toCustomUserDetails(user);
         String accessToken = jwtUtil.generateToken(userDetails);
@@ -71,6 +70,11 @@ public class AuthService extends EntityService<RefreshToken, RefreshTokenReposit
         return new AuthReadDto(accessToken, refreshToken);
     }
 
+    /**
+     * Generates a new accessToken based on the refreshToken
+     * @param refreshToken The token to authenticate with
+     * @return The refreshToken and a new accessToken
+     */
     public AuthReadDto refresh(String refreshToken) {
         Integer userId = jwtUtil.retrieveUserIdFromToken(refreshToken);
 
@@ -81,7 +85,16 @@ public class AuthService extends EntityService<RefreshToken, RefreshTokenReposit
         User user = userService.getUserById(userId);
         CustomUserDetails userDetails = mapper.toCustomUserDetails(user);
         String newAccessToken = jwtUtil.generateToken(userDetails);
+
         return new AuthReadDto(newAccessToken, refreshToken);
+    }
+
+    public void delete(Integer userId) {
+        repository.deleteById(userId);
+    }
+    
+    public void delete(String refreshToken) {
+        repository.deleteByToken(refreshToken);
     }
 
     /**
