@@ -67,6 +67,22 @@ public class UserService extends EntityService<User, UserRepository> {
 
         return repository.save(user);
     }
+
+    /**
+     * Deletes a user by their user id
+     * @param userId the user id of the to be deleted user
+     */
+    public void delete(Integer userId) {
+        repository.deleteById(userId);
+    }
+
+    /**
+     * Deletes a user by either their email or username
+     * @param identifier email or username value
+     */
+    public void delete(String identifier) {
+        repository.deleteByUserNameOrEmail(identifier, identifier);
+    }
     
     /**
      * 
