@@ -13,6 +13,7 @@ import com.anytimers.api.domain.user.controller.dto.UserWriteDto;
 import com.anytimers.api.domain.user.mapper.UserMapper;
 import com.anytimers.api.domain.user.service.UserService;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,5 +49,10 @@ public class UserController {
     @PatchMapping("/{id}")
     public UserReadDto updateUser(@PathVariable Integer id, @RequestBody UserWriteDto dto) {
         return userMapper.toReadDto(userService.update(id, dto));
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Integer id) {
+        userService.delete(id);
     }
 }
