@@ -26,6 +26,7 @@ public class AuthController {
     public AuthController(AuthService authService) {
         this.authService = authService;
     }
+    
     @PostMapping("/authenticate")
     public AuthReadDto authenticate(@Valid @RequestBody AuthWriteDto dto) {
         return authService.authenticate(dto);

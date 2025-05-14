@@ -22,7 +22,7 @@ public class SecurityConfig {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
-    @Bean //TODO: FIX WHEN WE HAVE JWT
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
