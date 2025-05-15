@@ -13,5 +13,4 @@ import com.anytimers.api.util.authorities.Authorities;
 @Retention(RetentionPolicy.RUNTIME)
 @PreAuthorize(Authorities.IS_USER)
 public @interface IsUser {
-    
 }

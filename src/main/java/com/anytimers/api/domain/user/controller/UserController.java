@@ -3,11 +3,13 @@ package com.anytimers.api.domain.user.controller;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.anytimers.api.util.authorities.Authorities;
 import com.anytimers.api.util.authorities.annotations.IsAdmin;
 import com.anytimers.api.util.authorities.annotations.IsUser;
 import com.anytimers.api.domain.user.controller.dto.UserReadDto;
@@ -56,11 +58,13 @@ public class UserController {
         return userMapper.toReadDto(userService.getCurrentUser());
     }
     
+    @IsAdmin
     @PatchMapping("/{id}")
     public UserReadDto updateUser(@PathVariable Integer id, @RequestBody UserWriteDto dto) {
         return userMapper.toReadDto(userService.update(id, dto));
     }
 
+    @IsAdmin
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Integer id) {
         userService.delete(id);
