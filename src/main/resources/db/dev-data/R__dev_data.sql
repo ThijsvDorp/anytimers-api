@@ -19,3 +19,25 @@ INSERT INTO users (
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP
 );
+
+INSERT INTO users (
+    email,
+    username,
+    first_name,
+    prefix,
+    last_name,
+    password,
+    role,
+    created_on,
+    updated_on
+) VALUES (
+    'user@example.com',
+    'user',
+    'user',
+    NULL,
+    'user',
+    '$2y$10$mzTRpTD36JJVYUi2b4fq0eIZNVnashhvSb7dSkzKvZMHjjx6l/ksW', -- bcrypt for 'pass'
+    'USER',
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP
+);

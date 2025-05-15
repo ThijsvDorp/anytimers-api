@@ -11,7 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.anytimers.api.domain.auth.jwt.JwtAuthenticationFilter;
+import com.anytimers.api.security.jwt.JwtAuthenticationFilter;
 
 @Configuration
 public class SecurityConfig {
@@ -37,6 +37,7 @@ public class SecurityConfig {
         
         return http.build();
     };
+    
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2Y, 11, new SecureRandom());

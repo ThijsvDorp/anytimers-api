@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.anytimers.api.util.authorities.annotations.IsAdmin;
+import com.anytimers.api.util.authorities.annotations.IsUser;
 import com.anytimers.api.domain.user.controller.dto.UserReadDto;
 import com.anytimers.api.domain.user.controller.dto.UserWriteDto;
 import com.anytimers.api.domain.user.mapper.UserMapper;
 import com.anytimers.api.domain.user.service.UserService;
-
-import io.swagger.v3.oas.models.responses.ApiResponse;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,17 +37,20 @@ public class UserController {
         this.userMapper = userMapper;
     }
 
+    @IsAdmin
     @PostMapping
     public UserReadDto createUser(@RequestBody UserWriteDto dto) {
         return userMapper.toReadDto(userService.createUser(dto));
     }
     
+    @IsAdmin
     @GetMapping
     public Page<UserReadDto> getUsers(Pageable pageable) {
         return userService.getAllUsers(pageable)
             .map(userMapper::toReadDto);
     }
 
+    @IsUser
     @GetMapping("/me")
     public UserReadDto getCurrentUser() {
         return userMapper.toReadDto(userService.getCurrentUser());

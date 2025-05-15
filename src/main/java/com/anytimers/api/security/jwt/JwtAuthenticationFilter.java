@@ -1,4 +1,4 @@
-package com.anytimers.api.domain.auth.jwt;
+package com.anytimers.api.security.jwt;
 
 import java.io.IOException;
 
