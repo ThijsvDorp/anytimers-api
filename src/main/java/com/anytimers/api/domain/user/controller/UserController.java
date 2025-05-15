@@ -13,6 +13,8 @@ import com.anytimers.api.domain.user.controller.dto.UserWriteDto;
 import com.anytimers.api.domain.user.mapper.UserMapper;
 import com.anytimers.api.domain.user.service.UserService;
 
+import io.swagger.v3.oas.models.responses.ApiResponse;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -44,6 +46,11 @@ public class UserController {
     public Page<UserReadDto> getUsers(Pageable pageable) {
         return userService.getAllUsers(pageable)
             .map(userMapper::toReadDto);
+    }
+
+    @GetMapping("/me")
+    public UserReadDto getCurrentUser() {
+        return userMapper.toReadDto(userService.getCurrentUser());
     }
     
     @PatchMapping("/{id}")

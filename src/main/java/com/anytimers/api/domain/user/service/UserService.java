@@ -10,6 +10,7 @@ import com.anytimers.api.domain.user.data.User;
 import com.anytimers.api.domain.user.data.UserRepository;
 import com.anytimers.api.domain.user.exception.UserAlreadyExistsException;
 import com.anytimers.api.domain.user.mapper.UserMapper;
+import com.anytimers.api.util.PrincipalUtil;
 import com.anytimers.api.util.service.EntityService;
 
 import jakarta.transaction.Transactional;
@@ -20,9 +21,12 @@ public class UserService extends EntityService<User, UserRepository> {
 
     private final UserMapper userMapper;
 
-    public UserService(UserRepository repository, UserMapper userMapper) {
+    private final PrincipalUtil principalUtil;
+
+    public UserService(UserRepository repository, UserMapper userMapper, PrincipalUtil principalUtil) {
         super("user", repository);
         this.userMapper = userMapper;
+        this.principalUtil = principalUtil;
     };
     
     public User createUser(UserWriteDto dto) {
@@ -37,6 +41,10 @@ public class UserService extends EntityService<User, UserRepository> {
         return repository.save(user);
     };
 
+    public User getCurrentUser() {
+        return principalUtil.getCurrentUser();
+    }
+    
     public Page<User> getAllUsers(Pageable pageable) {
         return repository.findAll(pageable);
     };
