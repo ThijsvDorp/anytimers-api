@@ -38,18 +38,5 @@ public class AuthController {
     public AuthReadDto authenticate(@Valid @RequestBody AuthWriteDto dto) {
         return authService.authenticate(dto);
     }
-    
-    @PreAuthorize("denyAll()")
-    @GetMapping("/test-deny")
-    public String testDeny() {
-        return "Should never see this";
-    }
 
-    @GetMapping("/debug-auth")
-    public List<String> debugAuth() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return auth.getAuthorities().stream()
-            .map(GrantedAuthority::getAuthority)
-            .toList();
-    }
 }

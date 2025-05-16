@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.anytimers.api.util.authorities.Authorities;
 import com.anytimers.api.util.authorities.annotations.IsAdmin;
 import com.anytimers.api.util.authorities.annotations.IsUser;
 import com.anytimers.api.domain.user.controller.dto.UserReadDto;
