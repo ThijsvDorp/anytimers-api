@@ -18,7 +18,10 @@ CREATE TABLE users (
 CREATE TABLE groups (
     id SERIAL PRIMARY KEY,
     group_name VARCHAR(255),
-    description VARCHAR(255)
+    description VARCHAR(255),
+    owner_id INTEGER,
+    created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_on TIMESTAMP
 );
 
 -- User / Group junction table

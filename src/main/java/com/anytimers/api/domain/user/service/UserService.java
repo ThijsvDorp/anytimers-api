@@ -1,5 +1,8 @@
 package com.anytimers.api.domain.user.service;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -101,4 +104,8 @@ public class UserService extends EntityService<User, UserRepository> {
         return repository.findByUserNameOrEmail(identifier, identifier)
             .orElseThrow(() -> new UserNotFoundException("No user could be found"));
     };
+
+    public Set<User> map(Set<Integer> userIds) {
+        return new HashSet<>(repository.findAllById(userIds));
+    }
 }

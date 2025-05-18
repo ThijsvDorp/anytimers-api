@@ -19,7 +19,7 @@ public interface UserMapper {
     @Mapping(target = "createdOn", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "updatedOn", ignore = true)
-    @Mapping(target = "role", ignore = true)//TODO: Maybe fix if i want to implement role management
+    @Mapping(target = "role", ignore = true) //TODO: Maybe fix if i want to implement role management
 
     User toEntity(UserWriteDto dto);
 

@@ -2,6 +2,10 @@ package com.anytimers.api.domain.user.data;
 
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
+
+import com.anytimers.api.domain.group.data.Group;
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
@@ -11,6 +15,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -32,7 +39,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class User {
@@ -71,6 +77,14 @@ public class User {
     @Column(name = "role")
     private Role role;
 
+    @ManyToMany
+    @JoinTable(
+        name = "user_groups",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "group_id")
+    )
+    private Set<Group> groups = new HashSet<>();
+
     @Setter(AccessLevel.NONE)
     @Column(name = "created_on")
     private Instant createdOn;
@@ -88,7 +102,9 @@ public class User {
     private void prePersist() {
         if (this.createdOn == null) {
             this.createdOn = Instant.now();
+        } 
+        if (this.role == null) {
+            this.role = Role.USER;
         }
-        this.role = Role.USER;
     }
 }
