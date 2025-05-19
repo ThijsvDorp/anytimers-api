@@ -5,16 +5,23 @@ spring:
       - classpath:db/dev-data
     baseline-on-migrate: true
   datasource:
-    url: jdbc:postgresql://anytimers-db:5432/anytimers
+    url: jdbc:h2:mem:anytimers;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1
     username: anytimers
     password: devpass
-    driver-class-name: org.postgresql.Driver
+    driver-class-name: org.h2.Driver
     tomcat:
       test-while-idle: true
       validation-query: SELECT 1
       time-between-eviction-runs-millis: 60000
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
   application:
     name: anytimers-api
+server:
+  port: 80
 jwt:
   secret: "b2d8f7e9c3a1b4e6d5f8c2a9e7b6d4f3"
   expiration: 360000
