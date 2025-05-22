@@ -11,7 +11,7 @@ public class GroupReadDto {
     
     private final Integer id;
 
-    private final String name;
+    private final String groupName;
 
     private final String description;
 

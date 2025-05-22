@@ -24,7 +24,7 @@ server:
   port: 80
 jwt:
   secret: "b2d8f7e9c3a1b4e6d5f8c2a9e7b6d4f3"
-  expiration: 360000
+  expiration: 360000000
 springdoc:
   swagger-ui:
     path: docs.html

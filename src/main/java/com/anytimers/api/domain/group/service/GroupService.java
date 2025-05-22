@@ -1,19 +1,17 @@
 package com.anytimers.api.domain.group.service;
 
-import java.security.Principal;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Set;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.anytimers.api.domain.group.controller.dto.GroupWriteDto;
 import com.anytimers.api.domain.group.data.Group;
 import com.anytimers.api.domain.group.data.GroupRepository;
+import com.anytimers.api.domain.group.exception.GroupNotFoundException;
 import com.anytimers.api.domain.group.mapper.GroupMapper;
 import com.anytimers.api.domain.user.data.User;
 import com.anytimers.api.domain.user.service.UserService;
@@ -56,6 +54,37 @@ public class GroupService extends EntityService<Group, GroupRepository>{
 
     public Page<Group> getAllGroups(Pageable pageable) {
         return repository.findAll(pageable);
+    }
+
+    public Group getGroupById(Integer id) {
+        return repository.findById(id)
+            .orElseThrow(() -> new GroupNotFoundException());
+    }
+
+    public Group update(Integer id, GroupWriteDto dto) {
+        Group group = repository.findById(id)
+            .orElseThrow(() -> new GroupNotFoundException());
+        
+        groupMapper.updateGroupFromDto(dto, group);
+        
+        // Add this block to handle userIds properly
+        if (dto.getUserIds() != null) {
+            // First clear existing bidirectional relationships
+            for (User existingUser : new ArrayList<>(group.getUsers())) {
+                existingUser.getGroups().remove(group);
+            }
+            group.getUsers().clear();
+            
+            // Add new users and maintain bidirectional relationship
+            Set<User> users = userService.map(dto.getUserIds());
+            group.setUsers(users);
+            
+            for (User user : users) {
+                user.getGroups().add(group);
+            }
+        }
+        
+        return repository.save(group);
     }
 
     /**

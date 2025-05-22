@@ -1,6 +1,7 @@
 package com.anytimers.api.domain.group.controller;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,7 +39,7 @@ public class GroupController {
 
     @IsUser
     @PostMapping("/")
-    public GroupReadDto createGroup(GroupWriteDto dto) {
+    public GroupReadDto createGroup(@RequestBody GroupWriteDto dto) {
         return groupMapper.toReadDto(groupService.createGroup(dto));
     }
 
@@ -52,11 +53,12 @@ public class GroupController {
     @IsAdmin
     @GetMapping("/{id}")
     public GroupReadDto getGroup(@PathVariable Integer id) {
-        return groupMapper.toReadDto(null);
+        return groupMapper.toReadDto(groupService.getGroupById(id));
     }
+
     @IsGroupOwner
     @PatchMapping("/{id}")
-    public GroupReadDto updateGroup(Integer id) {
-        return null;
+    public GroupReadDto updateGroup(@PathVariable Integer id, @RequestBody GroupWriteDto dto) {
+        return groupMapper.toReadDto(groupService.update(id, dto));
     }
 }
