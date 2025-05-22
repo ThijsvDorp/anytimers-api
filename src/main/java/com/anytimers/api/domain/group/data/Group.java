@@ -46,6 +46,8 @@ public class Group {
     @Column(name = "owner_id", nullable = false)
     private int ownerId;
 
+    //TODO: Think about adding public or private boolean.
+
     @ManyToMany(mappedBy = "groups")
     private Set<User> users = new HashSet<>();
 

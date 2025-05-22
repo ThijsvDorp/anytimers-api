@@ -8,13 +8,9 @@ import com.anytimers.api.domain.group.controller.dto.GroupReadDto;
 import com.anytimers.api.domain.group.controller.dto.GroupWriteDto;
 import com.anytimers.api.domain.group.mapper.GroupMapper;
 import com.anytimers.api.domain.group.service.GroupService;
-import com.anytimers.api.domain.user.controller.dto.UserWriteDto;
 import com.anytimers.api.util.authorities.annotations.IsAdmin;
 import com.anytimers.api.util.authorities.annotations.IsGroupOwner;
 import com.anytimers.api.util.authorities.annotations.IsUser;
-
-
-import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
