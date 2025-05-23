@@ -3,6 +3,7 @@ package com.anytimers.api.domain.group.controller.dto;
 import java.time.Instant;
 import java.util.Set;
 
+import com.anytimers.api.domain.user.controller.dto.UserSummaryDto;
 
 import lombok.Data;
 
@@ -15,7 +16,7 @@ public class GroupReadDto {
 
     private final String description;
 
-    private final Set<Integer> userIds;
+    private final Set<UserSummaryDto> users;
 
     private Instant createdOn;
 

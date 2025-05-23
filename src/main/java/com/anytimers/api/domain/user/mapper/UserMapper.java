@@ -8,6 +8,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
 import com.anytimers.api.domain.user.controller.dto.UserReadDto;
+import com.anytimers.api.domain.user.controller.dto.UserSummaryDto;
 import com.anytimers.api.domain.user.controller.dto.UserWriteDto;
 import com.anytimers.api.domain.user.data.User;
 
@@ -28,7 +29,24 @@ public interface UserMapper {
     UserReadDto toReadDto(User user);
 
     User toUser(User user);
+    @Mapping(target = "fullName", expression = "java(formatFullName(user))")
+    UserSummaryDto toSummaryDto(User user);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     User updateUserFromDto(UserWriteDto dto, @MappingTarget User user);
+
+    
+    default String formatFullName(User user) {
+        if (user == null) {
+            return null;
+        }
+        StringBuilder fullName = new StringBuilder(user.getFirstName());
+
+        if (user.getPrefix() != null && !user.getPrefix().isEmpty()) {
+            fullName.append(" ").append(user.getPrefix());
+        }
+
+        fullName.append(" ").append(user.getLastName());
+        return fullName.toString();
+    }
 }

@@ -14,9 +14,10 @@ import com.anytimers.api.domain.group.controller.dto.GroupReadDto;
 import com.anytimers.api.domain.group.controller.dto.GroupWriteDto;
 import com.anytimers.api.domain.group.data.Group;
 import com.anytimers.api.domain.user.data.User;
+import com.anytimers.api.domain.user.mapper.UserMapper;
 import com.anytimers.api.domain.user.service.UserService;
 
-@Mapper(componentModel = "spring", uses = UserService.class)
+@Mapper(componentModel = "spring", uses = {UserService.class, UserMapper.class})
 public interface GroupMapper {
     
     GroupMapper INSTANCE = Mappers.getMapper(GroupMapper.class);
@@ -28,14 +29,13 @@ public interface GroupMapper {
     @Mapping(target = "updatedOn", ignore = true)
     Group toEntity(GroupWriteDto dto);
 
-    GroupWriteDto toWriteDto(Group group);
-
-    @Mapping(source = "users", target = "userIds")
     GroupReadDto toReadDto(Group group);
 
     Group toGroup(Group group);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "ownerId", ignore = true)
+    @Mapping(source = "userIds", target = "users")
     Group updateGroupFromDto(GroupWriteDto dto, @MappingTarget Group group);
 
     default Set<Integer> mapUsersToUserIds(Set<User> users) {
@@ -46,4 +46,5 @@ public interface GroupMapper {
             .map(User::getId)
             .collect(Collectors.toSet());
     }
+
 }

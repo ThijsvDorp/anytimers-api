@@ -37,7 +37,7 @@ public class UserController {
         this.userMapper = userMapper;
     }
 
-    @IsAdmin
+    //@IsAdmin
     @PostMapping
     public UserReadDto createUser(@RequestBody UserWriteDto dto) {
         return userMapper.toReadDto(userService.createUser(dto));
