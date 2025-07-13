@@ -3,8 +3,10 @@ package com.anytimers.api.domain.user.service;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.anytimers.api.domain.auth.exception.UserNotFoundException;
@@ -25,11 +27,14 @@ public class UserService extends EntityService<User, UserRepository> {
     private final UserMapper userMapper;
 
     private final PrincipalUtil principalUtil;
+    
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository repository, UserMapper userMapper, PrincipalUtil principalUtil) {
+    public UserService(UserRepository repository, UserMapper userMapper, PrincipalUtil principalUtil, @Lazy BCryptPasswordEncoder passwordEncoder) {
         super("user", repository);
         this.userMapper = userMapper;
         this.principalUtil = principalUtil;
+        this.passwordEncoder = passwordEncoder;
     };
     
     public User createUser(UserWriteDto dto) {
@@ -39,8 +44,10 @@ public class UserService extends EntityService<User, UserRepository> {
         if (repository.existsByUserName(dto.getUserName())) {
             throw new UserAlreadyExistsException("username", dto.getUserName());
         }
-
+        
         User user = userMapper.toEntity(dto);
+        // Hash the password before saving
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
         return repository.save(user);
     };
 
@@ -66,12 +73,22 @@ public class UserService extends EntityService<User, UserRepository> {
         User user = repository.findById(id)
             .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        if (repository.existsByEmail(dto.getEmail())) {
+        // Check email uniqueness only if it's different from current email
+        if (!user.getEmail().equals(dto.getEmail()) && repository.existsByEmail(dto.getEmail())) {
             throw new UserAlreadyExistsException("email", dto.getEmail());
         }
 
-        if (repository.existsByUserName(dto.getUserName())) {
+        // Check username uniqueness only if it's different from current username
+        if (!user.getUserName().equals(dto.getUserName()) && repository.existsByUserName(dto.getUserName())) {
             throw new UserAlreadyExistsException("username", dto.getUserName());
+        }
+
+        // Hash the password if it's being updated and it's not already hashed
+        if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
+            // Only hash if the password is different from the current one (to avoid double hashing)
+            if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+                dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+            }
         }
 
         userMapper.updateUserFromDto(dto, user);
